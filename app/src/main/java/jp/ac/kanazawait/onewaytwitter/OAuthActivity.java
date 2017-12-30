@@ -1,5 +1,6 @@
 package jp.ac.kanazawait.onewaytwitter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,7 +22,7 @@ public class OAuthActivity extends Activity {
     private Twitter twitter;
     private RequestToken requestToken;
 
-    protected void onCreate(Bundle saveInstanceState){
+    protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
 
         // CallBack用URL設定
@@ -36,28 +37,28 @@ public class OAuthActivity extends Activity {
     // OAuth認証開始メソッド
     private void startAuthorize(){
         // AsyncTaskでの非同期処理
+        @SuppressLint("StaticFieldLeak")
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                try{
+                try {
                     // リクエストトークン取得
                     requestToken = twitter.getOAuthRequestToken(callBackURL);
                     return requestToken.getAuthorizationURL();
-                }
-                catch (TwitterException e){
+                } catch (TwitterException e) {
                     e.printStackTrace();
                 }
                 return null;
             }
+
             @Override
-            protected void onPostExecute(String url){
-                if(url != null){
+            protected void onPostExecute(String url) {
+                if(url != null) {
                     // URLへアクティビティ遷移
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
-                }
-                else {
-
+                } else {
+                    Toast.makeText(OAuthActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -66,34 +67,32 @@ public class OAuthActivity extends Activity {
 
     @Override
     public void onNewIntent(Intent intent){
-        if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith(callBackURL)){
+        if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith(callBackURL)) {
             return;
         }
         // Verifierを取得
         String verifier = intent.getData().getQueryParameter("oauth_verifier");
-
+        @SuppressLint("StaticFieldLeak")
         AsyncTask<String, Void, AccessToken> task = new AsyncTask<String, Void, AccessToken>() {
             @Override
             protected AccessToken doInBackground(String... params) {
-                try{
+                try {
                     // アクセストークン取得
                     return twitter.getOAuthAccessToken(requestToken, params[0]);
-                }
-                catch(TwitterException e){
+                } catch(TwitterException e) {
                     e.printStackTrace();
                 }
                 return null;
             }
 
             @Override
-            protected void onPostExecute(AccessToken accessToken){
+            protected void onPostExecute(AccessToken accessToken) {
                 // トークン登録
-                if(accessToken != null){
+                if(accessToken != null) {
                     // 認証成功
                     showToast("認証成功");
                     successOAuth(accessToken);
-                }
-                else{
+                } else {
                     // 認証失敗
                     showToast("認証失敗");
                 }
@@ -102,7 +101,7 @@ public class OAuthActivity extends Activity {
         task.execute(verifier);
     }
 
-    private void successOAuth(AccessToken accessToken){
+    private void successOAuth(AccessToken accessToken) {
         // トークン登録メソッド呼び出し
         TwitterUtils.storeAccessToken(this, accessToken);
 
@@ -116,7 +115,7 @@ public class OAuthActivity extends Activity {
     }
 
     // トースト表示メソッド
-    private void showToast(String text){
+    private void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

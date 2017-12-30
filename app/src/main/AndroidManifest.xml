@@ -31,8 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TweetActivity"
-            android:launchMode="singleTask">
+            android:name=".TweetActivity">
         </activity>
 
     </application>
