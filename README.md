@@ -9,6 +9,10 @@
 - 自分のタイムラインを3件取得して表示
 - 写真付きTweet
 
+## 画面構成
+
+![view.img](https://github.com/mryyomutga/https://github.com/mryyomutga/OnewayTwitter/image/view.png)
+
 ## Libraries
 
 - twitter4j-core-4.0.4
