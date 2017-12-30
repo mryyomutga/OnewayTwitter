@@ -14,7 +14,10 @@
     <string name="tweeted2">Tweet 2</string>
     <string name="tweeted3">Tweet 3</string>
     <string name="oauth">アカウント認証</string>
-    <string name="screen_name">screen name</string>
+    <string name="screen_name">@mym_ryg</string>
     <string name="tweet_text">from OnewayTwitter</string>
     <string name="tweet_button_label">Tweet</string>
+    <string name="icon">TODO</string>
+    <string name="name">name</string>
+    <string name="tweet">tweet</string>
 </resources>
