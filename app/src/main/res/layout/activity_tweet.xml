@@ -2,23 +2,34 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context="jp.ac.kanazawait.onewaytwitter.MainActivity">
 
-    <TextView
-        android:id="@+id/tweet_text"
-        android:layout_width="357dp"
-        android:layout_height="257dp"
-        android:text="@string/tweet_text"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+    <GridLayout
+        android:layout_width="384dp"
+        android:layout_height="525dp">
+
+        <EditText
+            android:id="@+id/tweet_text"
+            android:layout_width="match_parent"
+            android:layout_height="237dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/tweet_text"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+    </GridLayout>
 
     <Button
         android:id="@+id/tweet_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/tweet_button_label"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="446dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
