@@ -43,15 +43,17 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             Intent intent = new Intent(this, OAuthActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            Twitter twitter = TwitterUtils.getTwitterInstance(this);
+            tweetItem = new TweetItem(this);
+            listView = (ListView) findViewById(R.id.tweet_list);
+
+            tweetItem.getTimeLine(twitter);
+
+            findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
         }
 
-        Twitter twitter = TwitterUtils.getTwitterInstance(this);
-        tweetItem = new TweetItem(this);
-        listView = (ListView) findViewById(R.id.tweet_list);
 
-        tweetItem.getTimeLine(twitter);
-
-        findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
     }
 
     private class TweetItem extends ArrayAdapter<Status> {

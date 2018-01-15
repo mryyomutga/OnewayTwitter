@@ -18,6 +18,14 @@
 - [twitter4j-core-4.0.4](http://twitter4j.org/ja/index.html)
 - [android-smart-image-view-1.0.0](http://loopj.com/android-smart-image-view/)
 
+
+## 更新情報
+- 2018/01/15
+
+	MainActivityが裏で動いてるせいか、OAuthActivityに遷移しても認証前の段階でタイムラインを取得しようとして発生する例外の修正
+
+
+
 ## 参考
 
 - http://twitter4j.org/ja/index.html
