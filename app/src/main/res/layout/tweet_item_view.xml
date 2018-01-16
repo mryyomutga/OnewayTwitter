@@ -17,9 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/icon"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/icon"
-        android:text="@string/name" />
+        android:fontFamily="serif"
+        android:text="@string/name"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/screen_name"
@@ -28,7 +30,9 @@
         android:layout_alignTop="@+id/name"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/name"
-        android:text="@string/screen_name" />
+        android:fontFamily="serif"
+        android:text="@string/screen_name"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/text"
@@ -36,6 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/name"
         android:layout_below="@+id/name"
-        android:text="@string/tweet" />
+        android:layout_marginTop="8dp"
+        android:text="@string/tweet"
+        android:textSize="18sp" />
 
 </RelativeLayout>
