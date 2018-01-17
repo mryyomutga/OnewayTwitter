@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.*;
 import android.view.View.*;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import twitter4j.User;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Twitter twitter;
     private TweetItem tweetItem;
+    private TextView authorize;
     ListView listView;
     User user;
 
@@ -36,12 +40,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Twitterアカウントの認証
-        if(!TwitterUtils.hasAccessToken(this)) {
-            Intent intent = new Intent(this, OAuthActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
+        authorize = (TextView) findViewById(R.id.authorize);
+
+        // 認証している場合
+        if(TwitterUtils.hasAccessToken(this)) {
             twitter = TwitterUtils.getTwitterInstance(this);
             tweetItem = new TweetItem(this);
             listView = (ListView) findViewById(R.id.tweet_list);
@@ -50,8 +52,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             getAccountInfo();
 
+            authorize.setText("log out");
+
             findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
+        } else {
+            authorize.setText("log in");
         }
+
+        findViewById(R.id.authorize).setOnClickListener(this);
     }
 
     // アカウント情報の設定
@@ -85,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     // followers
                     TextView followers = (TextView) findViewById(R.id.followers);
                     followers.setText("Followers : " + user.getFollowersCount());
+                    // statuses count
+                    TextView statusesCount = (TextView) findViewById(R.id.statusesCount);
+                    statusesCount.setText(user.getStatusesCount() + " Tweet");
                     // icon
                     SmartImageView icon = (SmartImageView) findViewById(R.id.icon);
                     icon.setImageUrl(user.getProfileImageURL());
@@ -130,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 protected List<twitter4j.Status> doInBackground(Void... params) {
                     // Pagingの設定(要はリクエスト時に含めるパラメータ)
                     Paging paging = new Paging();
-                    paging.setCount(3);             // つぶやきを3件取得
+                    paging.setCount(5);             // つぶやきを3件取得
                     try {
                         return twitter.getUserTimeline(paging);
                     } catch (TwitterException e) {
@@ -143,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     if (statuses != null) {
                         for (twitter4j.Status status : statuses) {
                             tweetItem.add(status);
-                            showToast(status.getText());
                         }
                         listView.setAdapter(tweetItem);
                     }
@@ -154,16 +164,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v != null) {
-            switch (v.getId()) {
-                // Click Tweet
-                case R.id.transition_tweet_activity:
-                    Intent tweetIntent = new Intent(getApplication(), TweetActivity.class);
-                    startActivity(tweetIntent);
-                    break;
-                default:
-                    break;
-            }
+        if(v != null) switch (v.getId()) {
+            // Click Tweet
+            case R.id.transition_tweet_activity:
+                Intent intent = new Intent(this, TweetActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.authorize:
+                if (!TwitterUtils.hasAccessToken(this)) {
+                    intent = new Intent(this, OAuthActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    TwitterUtils.removeAccessToken(this);
+                    intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+            default:
+                break;
         }
     }
 

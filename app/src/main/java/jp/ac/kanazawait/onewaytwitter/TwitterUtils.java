@@ -47,6 +47,14 @@ public class TwitterUtils {
         editor.apply();
     }
 
+    // トークンの破棄
+    public static void removeAccessToken(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
     // トークンの読み出し
     public static AccessToken loadAccessToken(Context context) {
         // preferenceからトークンの読み出し
