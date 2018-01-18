@@ -27,7 +27,3 @@ dependencies {
     compile files('libs/twitter4j-core-4.0.4.jar')
     implementation files('libs/android-smart-image-view-1.0.0.jar')
 }
-
-repositories {
-
-}

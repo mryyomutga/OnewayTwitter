@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
-import twitter4j.conf.Configuration;
 
 /**
  * Created by mryyomutga on 2017/12/28.
