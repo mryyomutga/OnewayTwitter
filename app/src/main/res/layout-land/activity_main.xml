@@ -125,32 +125,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/icon" />
 
-        <Button
+        <ImageButton
             android:id="@+id/authorize"
-            android:layout_width="wrap_content"
+            android:layout_width="174dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginTop="32dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/authorize"
-            android:textAllCaps="?android:attr/windowOverscan"
-            android:textSize="18sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/login_button" />
 
         <ImageButton
             android:id="@+id/transition_tweet_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/tweet_button"
-            android:contentDescription="TODO"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="#00000000"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/authorize"
-            app:srcCompat="@drawable/tweet_button" />
+            app:srcCompat="@drawable/tweet_button_eng" />
 
     </android.support.constraint.ConstraintLayout>
 

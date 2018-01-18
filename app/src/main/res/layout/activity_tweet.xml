@@ -9,7 +9,7 @@
 
     <EditText
         android:id="@+id/tweet_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="426dp"
         android:layout_marginTop="10dp"
         android:ems="10"
@@ -19,23 +19,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/tweet_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/tweet_button_label"
-        android:textAllCaps="?android:attr/windowSwipeToDismiss"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        android:theme="@style/AppTheme"
+        android:background="#00000000"
+        android:contentDescription="TODO"
+        android:scaleType="fitXY"
+        android:src="@drawable/tweet_button_eng"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tweet_text"
-        app:layout_constraintVertical_bias="0.277" />
+        app:srcCompat="@drawable/tweet_button_eng" />
 
 </android.support.constraint.ConstraintLayout>

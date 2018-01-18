@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.view.*;
 import android.view.View.*;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ import twitter4j.User;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Twitter twitter;
     private TweetItem tweetItem;
-    private TextView authorize;
+    private ImageButton authorize;
     ListView listView;
     User user;
 
@@ -37,7 +39,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        authorize = (TextView) findViewById(R.id.authorize);
+        // Authorizeボタンの設定
+        authorize = (ImageButton) findViewById(R.id.authorize);
+        authorize.setBackgroundColor(0);
+        authorize.setScaleX((float) 0.75);
+        authorize.setScaleY((float) 0.75);
 
         // 認証している場合
         if(TwitterUtils.hasAccessToken(this)) {
@@ -49,11 +55,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             getAccountInfo();
 
-            authorize.setText("log out");
+            // ログアウトボタンに差し替える
+            authorize.setImageResource(R.drawable.logout_button);
 
             findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
-        } else {
-            authorize.setText("log in");
         }
 
         findViewById(R.id.authorize).setOnClickListener(this);

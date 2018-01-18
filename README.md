@@ -24,6 +24,19 @@
 
 	MainActivityが裏で動いてるせいか、OAuthActivityに遷移しても認証前の段階でタイムラインを取得しようとして発生する例外の修正
 
+- 2018/01/18
+
+    ButtonをImageButtonに変更
+    
+    TweetActivityでImageButtonを、
+    ```xml
+    app:srcCompat="@drawable/image"
+    ```
+    で表示できなかったため
+    ```xml
+    android:src="@drawable/image"
+    ```
+    で表示できた
 
 
 ## 参考

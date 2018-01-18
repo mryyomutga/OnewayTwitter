@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.*;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import twitter4j.Twitter;
@@ -21,7 +22,6 @@ public class TweetActivity extends Activity implements OnClickListener {
     private Twitter twitter;
     private EditText tweets;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
