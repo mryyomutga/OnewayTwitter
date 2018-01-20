@@ -7,7 +7,15 @@
 - ✔アプリ起動時にOAuth認証をして自分のTwitterアカウントと連携する
 - ✔Tweet機能
 - ✔自分のタイムラインを3件取得して表示
-- 写真付きTweet
+- ✔写真付きTweet
+
+## アプリケーションの設計
+
+- 事前にTwitterにアプリケーション登録しておいたConsumer KeyとConsumer Secretを用いてOAuth認証を行い,
+Access TokenとAccess Token Secretを取得する
+- 取得したアクセストークンSharedPreferenceに書き込むことで次回起動時に認証なしで使用できるようにする
+- 取得したアクセストークンを用いてタイムラインの取得やツイートを行う
+- SharedPreferenceに書き込まれたアクセストークンを消去することでログアウト処理を実装する
 
 ## 画面構成
 
@@ -15,8 +23,8 @@
 
 ## Libraries
 
-- [twitter4j-core-4.0.4](http://twitter4j.org/ja/index.html)
-- [android-smart-image-view-1.0.0](http://loopj.com/android-smart-image-view/)
+- [Twitter4j](http://twitter4j.org/ja/index.html)
+- [SmartImageView](http://loopj.com/android-smart-image-view/)
 
 
 ## 更新情報
@@ -27,17 +35,6 @@
 - 2018/01/18
 
     ButtonをImageButtonに変更
-    
-    TweetActivityでImageButtonを、
-    ```xml
-    app:srcCompat="@drawable/image"
-    ```
-    で表示できなかったため
-    ```xml
-    android:src="@drawable/image"
-    ```
-    で表示できた
-
 
 ## 参考
 
@@ -55,3 +52,11 @@
 - https://qiita.com/gabu/items/53857fcfa871b921af45
 - https://qiita.com/kskso9/items/1ee5b1dbe996402ae94b
 - https://akira-watson.com/android/asynctask.html
+- https://blanktar.jp/blog/2017/06/android-wear-dont-show-imageview.html
+
+## Memo
+
+- TweetActivityでImageButtonを、`app:srcCompat="@drawable/image"`で表示できなかったため、
+`android:src="@drawable/image"`を追加した
+
+- カメラなどの機能を使う場合は、<u>AndroidManifest.xml</u>にパーミッションの設定を記述するだけではなく、端末側でもアプリの設定で権限を与える必要がある

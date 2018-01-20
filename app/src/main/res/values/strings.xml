@@ -27,5 +27,6 @@
     <string name="icon">TODO</string>
 
     <string name="tweet">tweet</string>
+    <string name="hint">いまどうしてる？</string>
 
 </resources>

@@ -91,6 +91,7 @@ public class OAuthActivity extends Activity {
                 if(accessToken != null) {
                     // 認証成功
                     showToast("認証成功");
+                    showToast("ログインしました(´ω｀)");
                     successOAuth(accessToken);
                 } else {
                     // 認証失敗

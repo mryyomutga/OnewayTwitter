@@ -9,12 +9,15 @@
 
     <EditText
         android:id="@+id/tweet_text"
-        android:layout_width="0dp"
-        android:layout_height="426dp"
+        android:layout_width="match_parent"
+        android:layout_height="246dp"
         android:layout_marginTop="10dp"
         android:ems="10"
+        android:gravity="top"
+        android:hint="@string/hint"
         android:inputType="textPersonName"
-        android:text="@string/tweet_text"
+        android:singleLine="false"
+        android:soundEffectsEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,16 +26,31 @@
         android:id="@+id/tweet_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="168dp"
         android:layout_marginTop="8dp"
         android:background="#00000000"
         android:contentDescription="TODO"
         android:scaleType="fitXY"
         android:src="@drawable/tweet_button_eng"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/camera_button"
+        app:srcCompat="@drawable/tweet_button_eng" />
+
+    <ImageButton
+        android:id="@+id/camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:background="#00000000"
+        android:onClick="onClick"
+        android:src="@drawable/small_camera_blue"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tweet_text"
-        app:srcCompat="@drawable/tweet_button_eng" />
+        app:srcCompat="@drawable/small_camera_blue" />
 
 </android.support.constraint.ConstraintLayout>

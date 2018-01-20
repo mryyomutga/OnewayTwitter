@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         // Authorizeボタンの設定
         authorize = (ImageButton) findViewById(R.id.authorize);
         authorize.setBackgroundColor(0);
-        authorize.setScaleX((float) 0.75);
         authorize.setScaleY((float) 0.75);
 
         // 認証している場合
@@ -59,8 +58,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             authorize.setImageResource(R.drawable.logout_button);
 
             findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
+        } else {
+            findViewById(R.id.transition_tweet_activity).setVisibility(View.INVISIBLE);
         }
-
         findViewById(R.id.authorize).setOnClickListener(this);
     }
 
@@ -167,11 +167,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         if(v != null) switch (v.getId()) {
-            // Click Tweet
+            // Tweet
             case R.id.transition_tweet_activity:
                 Intent intent = new Intent(this, TweetActivity.class);
                 startActivity(intent);
                 break;
+            // Authorize
             case R.id.authorize:
                 if (!TwitterUtils.hasAccessToken(this)) {
                     intent = new Intent(this, OAuthActivity.class);
@@ -179,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     finish();
                 } else {
                     TwitterUtils.removeAccessToken(this);
+                    showToast("ログアウトしました<(_ _)>");
                     intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                     finish();
