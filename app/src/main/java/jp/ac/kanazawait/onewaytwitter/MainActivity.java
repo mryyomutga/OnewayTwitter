@@ -12,7 +12,6 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import twitter4j.User;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Twitter twitter;
     private TweetItem tweetItem;
-    private ImageButton authorize;
     ListView listView;
     User user;
 
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         // Authorizeボタンの設定
-        authorize = (ImageButton) findViewById(R.id.authorize);
+        ImageButton authorize = findViewById(R.id.authorize);
         authorize.setBackgroundColor(0);
         authorize.setScaleY((float) 0.75);
 
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         if(TwitterUtils.hasAccessToken(this)) {
             twitter = TwitterUtils.getTwitterInstance(this);
             tweetItem = new TweetItem(this);
-            listView = (ListView) findViewById(R.id.tweet_list);
+            listView = findViewById(R.id.tweet_list);
 
             tweetItem.getTimeLine(twitter);
 
@@ -59,12 +57,41 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
             findViewById(R.id.transition_tweet_activity).setOnClickListener(this);
         } else {
+            // ツイートボタンを非表示にする
             findViewById(R.id.transition_tweet_activity).setVisibility(View.INVISIBLE);
         }
         findViewById(R.id.authorize).setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v != null) switch (v.getId()) {
+            // Tweet
+            case R.id.transition_tweet_activity:
+                Intent intent = new Intent(this, TweetActivity.class);
+                startActivity(intent);
+                break;
+            // Authorize
+            case R.id.authorize:
+                if (!TwitterUtils.hasAccessToken(this)) {
+                    intent = new Intent(this, OAuthActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    TwitterUtils.removeAccessToken(this);
+                    showToast("ログアウトしました<(_ _)>");
+                    intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     // アカウント情報の設定
+    @SuppressLint("StaticFieldLeak")
     private void getAccountInfo() {
         new AsyncTask<Void, Void, User>() {
             @Override
@@ -78,28 +105,29 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 }
                 return null;
             }
+            @SuppressLint("SetTextI18n")
             protected void onPostExecute(User user) {
                 if (user != null) {
                     // name
-                    TextView name = (TextView) findViewById(R.id.name);
+                    TextView name = findViewById(R.id.name);
                     name.setText(user.getName());
                     // screen Name
-                    TextView screenName = (TextView) findViewById(R.id.screen_name);
+                    TextView screenName = findViewById(R.id.screen_name);
                     screenName.setText("@" + user.getScreenName());
                     // description
-                    TextView description = (TextView) findViewById(R.id.description);
+                    TextView description = findViewById(R.id.description);
                     description.setText(user.getDescription());
                     // friends
-                    TextView friends = (TextView) findViewById(R.id.friends);
+                    TextView friends = findViewById(R.id.friends);
                     friends.setText("Friends : " + user.getFriendsCount());
                     // followers
-                    TextView followers = (TextView) findViewById(R.id.followers);
+                    TextView followers = findViewById(R.id.followers);
                     followers.setText("Followers : " + user.getFollowersCount());
                     // statuses count
-                    TextView statusesCount = (TextView) findViewById(R.id.statusesCount);
+                    TextView statusesCount = findViewById(R.id.statusesCount);
                     statusesCount.setText(user.getStatusesCount() + " Tweet");
                     // icon
-                    SmartImageView icon = (SmartImageView) findViewById(R.id.icon);
+                    SmartImageView icon = findViewById(R.id.icon);
                     icon.setImageUrl(user.getProfileImageURL());
                 }
             }
@@ -109,28 +137,30 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private class TweetItem extends ArrayAdapter<Status> {
         private LayoutInflater inflater;
 
-        public TweetItem(@NonNull Context context) {
+        TweetItem(@NonNull Context context) {
             super(context, R.layout.tweet_item_view);
             inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         }
 
+        @SuppressLint({"SetTextI18n", "InflateParams"})
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.tweet_item_view, null);
             }
             Status item = getItem(position);
             // name
-            TextView name = (TextView) convertView.findViewById(R.id.name);
+            TextView name = convertView.findViewById(R.id.name);
             name.setText(item.getUser().getName());
             // screen name
-            TextView screenName = (TextView) convertView.findViewById(R.id.screen_name);
+            TextView screenName = convertView.findViewById(R.id.screen_name);
             screenName.setText("@" + item.getUser().getScreenName());
             // tweet
-            TextView text = (TextView) convertView.findViewById(R.id.text);
+            TextView text = convertView.findViewById(R.id.text);
             text.setText(item.getText());
             // icon
-            SmartImageView icon = (SmartImageView) convertView.findViewById(R.id.icon);
+            SmartImageView icon = convertView.findViewById(R.id.icon);
             icon.setImageUrl(item.getUser().getProfileImageURL());
             return convertView;
         }
@@ -161,33 +191,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     }
                 }
             }.execute();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v != null) switch (v.getId()) {
-            // Tweet
-            case R.id.transition_tweet_activity:
-                Intent intent = new Intent(this, TweetActivity.class);
-                startActivity(intent);
-                break;
-            // Authorize
-            case R.id.authorize:
-                if (!TwitterUtils.hasAccessToken(this)) {
-                    intent = new Intent(this, OAuthActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    TwitterUtils.removeAccessToken(this);
-                    showToast("ログアウトしました<(_ _)>");
-                    intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                break;
-            default:
-                break;
         }
     }
 

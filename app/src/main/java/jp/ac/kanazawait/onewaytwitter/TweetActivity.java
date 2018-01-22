@@ -32,7 +32,6 @@ public class TweetActivity extends Activity implements OnClickListener {
     private EditText tweets;
     private final static int RESULT_CAMERA = 1;
     private Uri imageUri;
-    private String tweetImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +39,55 @@ public class TweetActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_tweet);
         twitter = TwitterUtils.getTwitterInstance(this);
 
-        tweets = (EditText) findViewById(R.id.tweet_text);
+        tweets = findViewById(R.id.tweet_text);
 
         findViewById(R.id.tweet_button).setOnClickListener(this);
         findViewById(R.id.camera_button).setOnClickListener(this);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RESULT_CAMERA) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    String tweetImagePath = imageUri.getPath();
+                    showToast(tweetImagePath);
+                    break;
+                case RESULT_CANCELED:
+                    showToast("Canceled");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v){
+        if(v != null) {
+            switch (v.getId()) {
+                // Click Tweet Button
+                case R.id.tweet_button:
+                    tweet();
+                    Intent mainIntent = new Intent(getApplication(), MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                    break;
+                case R.id.camera_button:
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File mediaFile = setCameraConfig();
+                    if (mediaFile != null) {
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mediaFile));
+                        startActivityForResult(intent, RESULT_CAMERA);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
     private void tweet(){
         new AsyncTask<String, Void, Boolean>() {
             @Override
@@ -75,60 +117,27 @@ public class TweetActivity extends Activity implements OnClickListener {
         }.execute(tweets.getText().toString());
     }
 
+    // Toast表示メソッド
     private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RESULT_CAMERA) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    tweetImagePath = imageUri.getPath();
-                    showToast("Success " + tweetImagePath);
-                    break;
-                case RESULT_CANCELED:
-                    showToast("Canceled");
-                    break;
-                default:
-                    break;
+    // カメラの設定
+    private File setCameraConfig() {
+        // 画像の保存先のディレクトリ
+        File mediaStorageDir = new File(
+                Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES), "MyApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
             }
         }
-    }
-
-    @Override
-    public void onClick(View v){
-        if(v != null) {
-            switch (v.getId()) {
-                // Click Tweet Button
-                case R.id.tweet_button:
-                    tweet();
-                    Intent mainIntent = new Intent(getApplication(), MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
-                    break;
-                case R.id.camera_button:
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    // 画像の保存先のディレクトリ
-                    File mediaStorageDir = new File(
-                            Environment.getExternalStoragePublicDirectory(
-                                    Environment.DIRECTORY_PICTURES), "MyApp");
-                    if (!mediaStorageDir.exists()) {
-                        if (!mediaStorageDir.mkdirs()) {
-                            break;
-                        }
-                    }
-                    // 撮影した写真のタイムスタンプ
-                    String timeStamp = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss").format(new Date());
-                    // 撮影した画像のファイル名
-                    File mediaFile = new File(mediaStorageDir.getPath() + File.separator + timeStamp + ".png");
-                    imageUri = Uri.fromFile(mediaFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mediaFile));
-                    startActivityForResult(intent, RESULT_CAMERA);
-                    break;
-                default:
-                    break;
-            }
-        }
+        // 撮影した写真のタイムスタンプ
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss").format(new Date());
+        // 撮影した画像のファイル名
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + timeStamp + ".png");
+        imageUri = Uri.fromFile(mediaFile);
+        return mediaFile;
     }
 }
